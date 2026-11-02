@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One Piece — Tripulação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Pirata+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="fundo" id="fundo" aria-hidden="true"></div>
+
+  <header class="topo">
+    <h1 class="titulo">One Piece</h1>
+    <div class="video" id="video"></div>
+  </header>
+
+  <main class="palco">
+    <nav class="menu" aria-label="Tripulação" id="menu"></nav>
+
+    <div class="centro">
+      <button type="button" class="seta" id="anterior" aria-label="Membro anterior">&#8249;</button>
+      <section class="vitrine" id="vitrine" aria-live="polite"></section>
+      <button type="button" class="seta" id="proximo" aria-label="Próximo membro">&#8250;</button>
+    </div>
+
+    <aside class="descricao" id="descricao" aria-live="polite"></aside>
+  </main>
+
+  <!-- Ordem importa: Model → View → Controller → main -->
+  <script src="js/model/dados.js"></script>
+  <script src="js/view/menuView.js"></script>
+  <script src="js/view/cardsView.js"></script>
+  <script src="js/view/videoView.js"></script>
+  <script src="js/view/fundoView.js"></script>
+  <script src="js/view/descricaoView.js"></script>
+  <script src="js/controller/appController.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

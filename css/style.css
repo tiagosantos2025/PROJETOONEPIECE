@@ -1,0 +1,386 @@
+:root {
+  --mar-fundo: #0a2540;
+  --mar-medio: #12476b;
+  --mar-claro: #1f6f8b;
+  --espuma: #eaf3f2;
+  --chapeu: #f2b632;
+  --colete: #c93a2b;
+  --vidro: rgba(10, 37, 64, 0.58);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: "Alegreya Sans", system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--espuma);
+  background:
+    radial-gradient(1200px 500px at 50% -10%, var(--mar-claro), transparent 70%),
+    var(--mar-fundo);
+  background-attachment: fixed;
+}
+
+/* ---------- Imagem de fundo (transparente) ---------- */
+.fundo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+/* ---------- Topo + menu ---------- */
+.topo {
+  padding: 1.25rem 1.5rem 0;
+  text-align: center;
+}
+
+.titulo {
+  font-family: "Pirata One", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 8vw, 5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--chapeu);
+  text-shadow: 3px 3px 0 var(--colete);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.menu__item {
+  position: relative;
+  padding: 0.6rem 0.25rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  color: var(--espuma);
+  cursor: pointer;
+}
+
+.menu__item::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--chapeu);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.menu__item:hover::after,
+.menu__item[aria-current="true"]::after { transform: scaleX(1); }
+.menu__item[aria-current="true"] { color: var(--chapeu); font-weight: 700; }
+
+.menu__item:focus-visible,
+.seta:focus-visible,
+.card:focus-visible {
+  outline: 3px solid var(--chapeu);
+  outline-offset: 3px;
+}
+
+/* ---------- Vídeo do topo + player ---------- */
+.video {
+  width: min(480px, 90vw);
+  margin: 1.25rem auto 0.75rem;
+}
+
+.video__tela {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--mar-medio);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.video__player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video__controles {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.video__botao {
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--chapeu);
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--chapeu);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.video__botao:hover:not(:disabled),
+.video__botao[aria-pressed="true"] { background: var(--chapeu); color: var(--mar-fundo); }
+
+.video__botao:disabled { opacity: 0.4; cursor: default; }
+.video__botao:focus-visible { outline: 3px solid var(--espuma); outline-offset: 2px; }
+
+.video__aviso {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* ---------- Palco: seta · card · seta ---------- */
+.palco {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto minmax(150px, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.centro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Descrição à direita: aparece ao clicar na foto */
+.descricao {
+  max-width: 34ch;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--chapeu);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.descricao.aberta {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.descricao__nome {
+  font-family: "Pirata One", Georgia, serif;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1.1;
+  color: var(--chapeu);
+}
+
+.descricao__texto { margin-top: 0.5rem; font-size: 1.15rem; }
+
+.vitrine { width: min(380px, 70vw); }
+
+.seta {
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--chapeu);
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--chapeu);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.seta:hover { background: var(--chapeu); color: var(--mar-fundo); }
+
+/* ---------- Card: imagem fosca → no hover, aparece a verdadeira ---------- */
+.card {
+  position: relative;
+  aspect-ratio: 3 / 4; /* tamanho fixo do card, igual para todos os personagens */
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--mar-medio);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.card__imagem,
+.card__fosca {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* a foto se ajusta ao card: todas ficam do mesmo tamanho */
+}
+
+/* A fosca fica por cima da verdadeira e some suavemente */
+.card__fosca {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+/* Sem arquivo de imagem fosca: desfoque automático na imagem verdadeira */
+.card__fosca--auto {
+  filter: blur(10px) saturate(0.8);
+  transform: scale(1.1);
+}
+
+/* Nome visível enquanto a imagem está fosca */
+.card__etiqueta {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 2.5rem 1rem 0.9rem;
+  background: linear-gradient(transparent, rgba(5, 18, 32, 0.85));
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: opacity 0.3s ease;
+}
+
+/* Texto aparece embaixo, sobre a imagem verdadeira */
+.card__texto {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 3rem 1.25rem 1.25rem;
+  background: linear-gradient(transparent, rgba(5, 18, 32, 0.92) 40%);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.card__nome {
+  font-family: "Pirata One", Georgia, serif;
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--chapeu);
+}
+
+.card__descricao { font-size: 1.05rem; }
+
+/* Estado ativo: mouse, foco por teclado ou toque */
+.card:hover .card__fosca,
+.card:focus-visible .card__fosca,
+.card.ativo .card__fosca { opacity: 0; }
+
+.card:hover .card__etiqueta,
+.card:focus-visible .card__etiqueta,
+.card.ativo .card__etiqueta { opacity: 0; }
+
+.card:hover .card__texto,
+.card:focus-visible .card__texto,
+.card.ativo .card__texto {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.3s; /* o texto entra depois da imagem verdadeira */
+}
+
+/* Troca de imagem: entrada suave */
+.card__imagem--troca { animation: entrar 0.4s ease; }
+@keyframes entrar { from { opacity: 0.2; } to { opacity: 1; } }
+
+/* Setas e pontinhos: só aparecem quando o card está ativo */
+.card__botao {
+  position: absolute;
+  z-index: 2;
+  border: 0;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.card__botao--esq,
+.card__botao--dir {
+  top: 38%;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.75);
+  font: inherit;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--chapeu);
+}
+
+.card__botao--esq { left: 0.6rem; }
+.card__botao--dir { right: 0.6rem; }
+.card__botao--esq:hover,
+.card__botao--dir:hover { background: var(--chapeu); color: var(--mar-fundo); }
+
+.card__pontos {
+  position: absolute;
+  z-index: 2;
+  top: 0.75rem;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.card__ponto {
+  position: relative;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: rgba(234, 243, 242, 0.55);
+}
+
+.card__ponto[aria-current="true"] { background: var(--chapeu); }
+
+.card__botao:focus-visible { outline: 3px solid var(--espuma); outline-offset: 2px; }
+
+.card:hover .card__botao,
+.card:focus-visible .card__botao,
+.card.ativo .card__botao { opacity: 1; pointer-events: auto; }
+
+.card:has(.card__botao:focus-visible) .card__fosca,
+.card:has(.card__botao:focus-visible) .card__etiqueta { opacity: 0; }
+
+.card:has(.card__botao:focus-visible) .card__texto {
+  opacity: 1;
+  transform: none;
+}
+
+.card:has(.card__botao:focus-visible) .card__botao { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 860px) {
+  .palco { grid-template-columns: 1fr; justify-items: center; }
+  .menu { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.25rem 1.25rem; }
+  .descricao { max-width: 50ch; padding: 1rem 0 0; border-left: 0; border-top: 3px solid var(--chapeu); transform: none; }
+  .descricao:not(.aberta) { display: none; }
+}
+
+@media (max-width: 520px) {
+  .palco { gap: 0.5rem; }
+  .centro { gap: 0.5rem; }
+  .seta { width: 2.5rem; height: 2.5rem; font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+}
